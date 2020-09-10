@@ -77,8 +77,8 @@ app.post('/create-item', function(req, res){
    //text from input element with name attribute item
    //insert one method compeletes 
   //  create new object with property text
-   {text: req.body.item}, function() {
-    res.redirect('/')
+   {text: req.body.item}, function(info, err) {
+    res.json(info.ops[0])
    })
 })
 
@@ -91,7 +91,13 @@ app.post('/update-item', function(req, res) {
   //include field being updated
   //first argument which document you want to update based on id
 db.collection('items').findOneAndUpdate({_id: new mongodb.ObjectId(req.body.id)}, {$set: {text: req.body.text}}, function(){
+//send the object with a text property
   res.send("Success")
  })
 })
 
+app.post('/delete-item', function(req, res) {
+  db.collection('items').deleteOne({_id: new mongodb.ObjectId(req.body.id)}, function() {
+    res.send("Success")
+  })
+})
